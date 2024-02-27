@@ -24,7 +24,7 @@ with io.open('HISTORY.rst', 'r', encoding='utf8') as f:
 
 REQUIREMENTS = [
     "fs>2.0",
-    "webdavclient3",
+    "webdavclient3==3.14.7-alpha.1",
     "python-dateutil",
     "cachetools"
 ]
@@ -50,5 +50,5 @@ setup(
     tests_require=['docker'],
     test_suite='webdavfs.tests',
     url="http://pypi.python.org/pypi/fs.webdavfs/",
-    version="0.4.3.1"
+    version="0.4.3.2.alpha-2"
 )

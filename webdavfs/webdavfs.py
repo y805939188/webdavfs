@@ -164,11 +164,15 @@ class WebDAVFS(FS):
 
     def __init__(self, url, login=None, password=None, root=None, timeout=None,
                  cache_maxsize=10000, cache_ttl=60,
-                 use_temp_files=False, temp_path=None):
+                 use_temp_files=False, temp_path=None, token=None, request_data=None, headers_ext=None,
+                **webdav_config_kwargs,
+                ):
         self.url = url
         self.root = root
         self.use_temp_files = use_temp_files
         self.temp_path = temp_path
+        self.headers_ext = headers_ext
+        self.request_data = request_data
         super(WebDAVFS, self).__init__()
 
         options = {
@@ -176,7 +180,9 @@ class WebDAVFS(FS):
             'webdav_login': login,
             'webdav_password': password,
             'webdav_timeout': timeout,
-            'root': self.root
+            'webdav_token': token,
+            'root': self.root,
+            **webdav_config_kwargs,
         }
         self.info_cache = TTLCache(maxsize=cache_maxsize,
                                    ttl=cache_ttl)
@@ -273,7 +279,10 @@ class WebDAVFS(FS):
                 if not parent_path.endswith('/'):
                     parent_path += '/'
                 response = self.client.execute_request(action='info',
-                                                       path=urn.quote())
+                                                       path=urn.quote(),
+                                                       data=self.request_data,
+                                                       headers_ext=self.headers_ext,
+                                                    )
                 info = wc.WebDavXmlUtils.parse_info_response(content=response.content, path=path, hostname=self.client.webdav.hostname)
                 if info['name'] is None:
                     info['name'] = _path.split("/")[-1]
