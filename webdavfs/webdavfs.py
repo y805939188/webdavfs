@@ -269,7 +269,7 @@ class WebDAVFS(FS):
             namespaces = namespaces or ()
             urn = wu.Urn(_path.encode('utf-8'))
             path = self.client.get_full_path(urn)
-            if path in self.info_cache:
+            if 0 and path in self.info_cache:
                 info = self.info_cache[path]
             else:
                 from urllib.parse import urlparse
